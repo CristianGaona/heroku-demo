@@ -363,7 +363,7 @@ INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gao
 INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
 INSERT INTO `usuarios` (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
 ```
-Deben configurar el archivo application.properties de la siguiente manera, en donde se indica el nombre de la aplicación, puerto en el que va a correer y la ultima linea sirve para ver como se generar los inserts por consola
+Deben configurar el archivo **application.properties** de la siguiente manera, en donde se indica el nombre de la aplicación, puerto en el que va a correer y la ultima linea sirve para ver como se generar los inserts por consola
 ```java
 spring.application.name=servicio-usuarios
 server.port=8003
@@ -380,3 +380,375 @@ imagen3
 DELETE: localhost:8003/api/v1/users/1
 * imagen4
 Para probar todos estos endpoints se suguiere que lo realicen en Postman
+## Crear [ViewContgroller.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/controllers/ViewController.java)
+Esta clase nos permite conocetar todo nuestro backend con el Frontend, dentro del método ver() retornamos nuestro archivo User.html
+```java
+package com.formacionbdi.springboot.app.lojacar.controllers;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class ViewController {
+	
+	@GetMapping("/")
+	public String ver() {
+		return "Users";
+	}
+}
+ ```
+## Crear una plantilla de vista de FreeMarker
+Para esto debemos agregar la siguiente dependencia esto se lo puede hacer de la siguinete manera en el caso que utilicen Spring Tools (STS) 
+* Clic derecho en el proyecto
+* Seleccionamos casi en la prte final Spring -> Edit Startes
+* Se presentara una ventana emergente con todos las dependecias disponibles
+* Buscar Template Engines -> Apache Freemarker
+* Presionar OK, y se agrega la dependencia.
+
+En el caso que no utilicen STS se debe agregar la siguiente dependencia en el pom.xml
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-freemarker</artifactId>
+</dependency>
+```
+
+Ahora si procesdemos a crear Users.html y agregar la librería de Vue Js junto con [Axios](https://vuejs.org/v2/cookbook/using-axios-to-consume-apis.html) que nos permite consumir y mostrar datos una API, en esta caso coumiremos la API que creamos con Spring Boot, axios es un cliente HTTP basado en promesas
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Full stack CRUD Example with Spring Boot, PostgreSQL and VueJS</title>
+  <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/users.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <h1>User CRUD</h1>
+    <main id="app">
+      <router-view></router-view>
+    </main>
+  </div>
+
+  <template id="user">
+    <div>
+      <h2>Personal Dates: </h2>
+      <h5>Name: {{ user.nombre }}</h5>
+      <h5>Last Name: {{ user.apellido }}</h5>
+      <h5>Email: {{ user.correo }}</h5>
+      <h5>Age: {{ user.edad }}</h5>
+      
+      <br/>
+      <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+      <a>
+        <router-link to="/">Back to user list</router-link>
+      </a>
+    </div>
+  </template>
+
+  <template id="user-list">
+    <div>
+      <div class="actions">
+        <a class="btn btn-default">
+          <router-link :to="{path: '/add-user'}">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add User
+          </router-link>
+        </a>
+      </div>
+      <div class="filters row">
+        <div class="form-group col-sm-3">
+          <input placeholder="Search" v-model="searchKey" class="form-control" id="search-element" requred/>
+        </div>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Correo</th>
+          <th class="col-sm-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="usuarios in filteredProducts">
+          <!-- tr v-for="product in products" -->
+          <!-- tr v-for="product in products | filterBy searchKey in 'name'" -->
+          <td>
+            <a>
+              <router-link :to="{name: 'user', params: {user_id: usuarios.id}}">{{ usuarios.nombre }}</router-link>
+            </a>
+          </td>
+          <td>{{ usuarios.apellido }}</td>
+         <td>{{ usuarios.correo }}</td>
+          <td>
+            <a class="btn btn-warning btn-xs">
+              <router-link :to="{name: 'user-edit', params: {user_id: usuarios.id}}">Edit</router-link>
+            </a>
+            <a class="btn btn-danger btn-xs">
+              <router-link :to="{name: 'user-delete', params: {user_id: usuarios.id}}">Delete</router-link>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </template>
+
+<template id="add-user">
+    <div>
+      <h2>Add new user</h2>
+      <form @submit="createUser">
+        <div class="form-group">
+          <label for="add-nombre">Nombre</label>
+          <input class="form-control" id="add-nombre" v-model="user.nombre" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-apellido">Apellido</label>
+          <input class="form-control" id="add-apellido" v-model="user.apellido">
+        </div>
+        <div class="form-group">
+          <label for="add-correo">Correo</label>
+          <input class="form-control" id="add-correo" v-model="user.correo" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-edad">Edad</label>
+          <input class="form-control" id="add-edad" v-model="user.edad" required/>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+  <template id="user-delete">
+    <div>
+      <h2>Delete user {{ user.nombre }}</h2>
+      <form @submit="deleteUser">
+        <p>The action cannot be undone.</p>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+<template id="user-edit">
+    <div>
+      <h2>Edit User</h2>
+      <form @submit="updateUser">
+        <div class="form-group">
+          <label for="edit-nombre">Nombre</label>
+          <input class="form-control" id="edit-nombre" v-model="user.nombre" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-apellido">Apellido</label>
+          <input  class="form-control" id="edit-apellido" v-model="user.apellido" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-correo">Correo</label>
+          <input class="form-control" id="edit-correo" v-model="user.correo" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-edad">Edad</label>
+          <input class="form-control" id="edit-edad" v-model="user.edad" required/>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+  <script src="https://unpkg.com/vue@2.5.22/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+  <script src="/users.js"></script>
+
+</body>
+</html>
+```
+## Crear [users.js](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/resources/static/users.js)
+aqui tenemos todas las funciones necesarias para realizar el CRUD desde la vista web y las correspondientes rutas.
+```js
+var usuarios = [];
+
+function findUser(userId) {
+    return usuarios[findProductKey(userId)];
+}
+
+function findProductKey(userId) {
+    for (var key = 0; key < usuarios.length; key++) {
+        if (usuarios[key].id == userId) {
+            return key;
+        }
+    }
+}
+
+var usuarioServImplement = {
+    findAll(fn) {
+        axios
+            .get('/api/v1/users')
+            .then(response => fn(response))
+            .catch(error => console.log(error))
+    },
+
+    findById(id, fn) {
+        axios
+            .get('/api/v1/users/' + id)
+            .then(response => fn(response))
+            .catch(error => console.log(error))
+    },
+
+    create(user, fn) {
+        axios
+            .post('/api/v1/users', user)
+            .then(response => fn(response))
+            .catch(error => console.log(error))
+    },
+
+    deleteUser(id, fn) {
+        axios
+            .delete('/api/v1/users/' + id)
+            .then(response => fn(response))
+            .catch(error => console.log(error))
+    },
+    update(id, user, fn) {
+        axios
+          .put('/api/v1/users/' + id, user)
+          .then(response => fn(response))
+          .catch(error => console.log(error))
+      }
+
+}
+var List = Vue.extend({
+    template: '#user-list',
+    data: function () {
+        return { usuarios: [], searchKey: '' };
+    },
+    computed: {
+        filteredProducts() {
+            return this.usuarios.filter((user) => {
+                return user.nombre.indexOf(this.searchKey) > -1
+                    || user.apellido.indexOf(this.searchKey) > -1
+
+            })
+        }
+    },
+    mounted() {
+        usuarioServImplement.findAll(r => { this.usuarios = r.data; usuarios = r.data })
+    }
+});
+
+var User = Vue.extend({
+    template: '#user',
+    data: function () {
+        return { user: findUser(this.$route.params.user_id) };
+    }
+});
+
+var UserEdit = Vue.extend({
+    template: '#user-edit',
+    data: function () {
+        return { user: findUser(this.$route.params.user_id) };
+    },
+    methods: {
+        updateUser: function () {
+        	usuarioServImplement.update(this.user.id, this.user, r => router.push('/'))
+        }
+    }
+});
+
+var UserDelete = Vue.extend({
+    template: '#user-delete',
+    data: function () {
+        return { user: findUser(this.$route.params.user_id) };
+    },
+    methods: {
+    	deleteUser: function () {
+            usuarioServImplement.deleteUser(this.user.id, r => router.push('/'))
+        }
+    }
+});
+
+var AddUser = Vue.extend({
+    template: '#add-user',
+    data() {
+        return {
+            user: { nombre: '', apellido: '', correo: '', edad: 0 }
+        }
+    },
+    methods: {
+        createUser() {
+            usuarioServImplement.create(this.user, r => router.push('/'))
+        }
+    }
+});
+
+var router = new VueRouter({
+    routes: [
+        { path: '/', component: List },
+        { path: '/user/:user_id', component: User, name: 'user' },
+        { path: '/add-user', component: AddUser },
+        { path: '/user/:user_id/edit', component: UserEdit, name: 'user-edit' },
+        { path: '/user/:user_id/delete', component: UserDelete, name: 'user-delete' }
+    ]
+});
+
+new Vue({
+    router
+}).$mount('#app')
+```
+### Crear user.css
+```css
+.actions {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+```
+## Probar la aplicación web
+En est punto ya se puede probar la aplicación con una base de datos en memoria H2
+
+Con la siguiente url = http://localhost:8003/
+
+imagen5
+## Crear base de datos en ProsgreSQL
+Se asume que ya esta instaldo postgreSQL en la máquina local por tal razón se procede a realizar los siguinetes pasos:
+* Crear una base de datos en PostgreSQL mediante pgadmin 4, no se debe crear la tabla usuarios ya que eso se crea atomaticamente al levantar la aplicación de Spring Boot. Por defecto PostgresSQL se ejecuta en el puerto 5432
+* Agregar la dependecia, se puede revisar el [pom.xml](pom.xml) cargado en este repositorio
+```xml
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+* configurar el archivo **application.properties** de la siguiente manera.
+Como se puede observar en la configuración (spring.datasource.url) se coloca el puerto por defecto y el nombre de la base de datos, además usuario, contraseña, driver y el dialect en est caso lehe colocado PostgreSQL95Dialect porque funciona desde la version 9.5 en adelante.
+```java
+spring.application.name=servicio-usuarios
+server.port=8003
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/db_heroku_demo?serverTimezone=America/Guayaquil
+spring.datasource.username=postgres
+spring.datasource.password=crisda24
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL95Dialect
+spring.jpa.hibernate.ddl-auto=create
+logging.level.org.hibernate.SQL=debug
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+```
+* Par que se realicen los insetr automaticos se debe quitar las comillas inversas (`usuarios`) que se coloco en el import.sql cuando ejecutamos con H2 y debe quedar de la siguiente manera:
+```sql
+INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gaona', 'crgaonas24@gmail.com', 24);
+INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
+INSERT INTO usuarios (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
+```
+En est punto ya se puede probar nuevamente la aplicación web con la siguiente url= [http://localhost:8003/](http://localhost:8003/) con la unica ventaja que ya no se utiliza un base de datos en memoría, ahora tenemos una base de datos local.
