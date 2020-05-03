@@ -102,7 +102,7 @@ var AddUser = Vue.extend({
     template: '#add-user',
     data() {
         return {
-            user: { nombre: '', apellido: '' }
+            user: { nombre: '', apellido: '', correo: '', edad: 0 }
         }
     },
     methods: {

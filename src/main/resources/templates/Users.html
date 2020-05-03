@@ -53,6 +53,7 @@
         <tr>
           <th>Nombres</th>
           <th>Apellidos</th>
+          <th>Correo</th>
           <th class="col-sm-2">Actions</th>
         </tr>
         </thead>
@@ -66,7 +67,7 @@
             </a>
           </td>
           <td>{{ usuarios.apellido }}</td>
-         
+         <td>{{ usuarios.correo }}</td>
           <td>
             <a class="btn btn-warning btn-xs">
               <router-link :to="{name: 'user-edit', params: {user_id: usuarios.id}}">Edit</router-link>
@@ -92,6 +93,14 @@
         <div class="form-group">
           <label for="add-apellido">Apellido</label>
           <input class="form-control" id="add-apellido" v-model="user.apellido">
+        </div>
+        <div class="form-group">
+          <label for="add-correo">Correo</label>
+          <input class="form-control" id="add-correo" v-model="user.correo" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-edad">Edad</label>
+          <input class="form-control" id="add-edad" v-model="user.edad" required/>
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
         <a class="btn btn-default">
