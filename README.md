@@ -745,10 +745,30 @@ logging.level.org.hibernate.SQL=debug
 
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 ```
-* Par que se realicen los insetr automaticos se debe quitar las comillas inversas (`usuarios`) que se coloco en el import.sql cuando ejecutamos con H2 y debe quedar de la siguiente manera:
+* Para que se realicen los insert automáticos se debe quitar las comillas inversas (`usuarios`) que se coloco en el import.sql cuando ejecutamos con H2 y debe quedar de la siguiente manera:
 ```sql
 INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gaona', 'crgaonas24@gmail.com', 24);
 INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
 INSERT INTO usuarios (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
 ```
 En est punto ya se puede probar nuevamente la aplicación web con la siguiente url= [http://localhost:8003/](http://localhost:8003/) con la unica ventaja que ya no se utiliza un base de datos en memoría, ahora tenemos una base de datos local.
+## Desplegando la aplicación en Heroku
+Para desplegar nuestra aplicación en Heroku se debe realizar los siguientes pasos:
+* Crear una cuenta en Heroku: https://www.heroku.com/
+* Crear una app en heroku en el siguiente enlace se puede apreciar como crear una app en heroku: https://portalmybot.com/guia/heroku/cuenta-configuracion-app
+* En **application.properties** volvemos a la configuración anterior con la base de datos en memoria H2
+```java
+spring.application.name=servicio-usuarios
+server.port=8003
+logging.level.org.hibernate.SQL=debug
+```
+* En el **import.sql** volvemos a agregar las comillas inversas a usuarios
+```sql
+INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gaona', 'crgaonas24@gmail.com', 24);
+INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
+INSERT INTO `usuarios` (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
+```
+Nota: Estos dos últimos pasos mencionadoss se los hace con la finalidad de que al momento de desplegar nuestra aplicación web en Heroku no tengamos errores con la base de datos local. Pero más adelante se hará uso de una base de datos en la nube.
+* En este punto se recomienda subir nuestra aplicación a GitHub un repositorio remoto se asume que se conoce este procedimiento, si no es el caso se recomienda ver el siguiente tutorial [subir proyecto a Git Hub](https://www.ecodeup.com/como-subir-el-codigo-de-tu-proyecto-a-github/). 
+* Una vez que se subió el proyecto a Git Hub, se procede a conectarlo con Heroku e implementará automáticamente su app siempre que se actualice su repositorio GitHub creado. 
+
