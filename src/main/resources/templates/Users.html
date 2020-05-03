@@ -21,8 +21,9 @@
     <div>
       <h2>Personal Dates: </h2>
       <h5>Name: {{ user.nombre }}</h5>
-      
       <h5>Last Name: {{ user.apellido }}</h5>
+      <h5>Email: {{ user.correo }}</h5>
+      <h5>Age: {{ user.edad }}</h5>
       
       <br/>
       <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
@@ -123,7 +124,14 @@
           <label for="edit-apellido">Apellido</label>
           <input  class="form-control" id="edit-apellido" v-model="user.apellido" required>
         </div>
-        
+        <div class="form-group">
+          <label for="edit-correo">Correo</label>
+          <input class="form-control" id="edit-correo" v-model="user.correo" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-edad">Edad</label>
+          <input class="form-control" id="edit-edad" v-model="user.edad" required/>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
         <a class="btn btn-default">
           <router-link to="/">Cancel</router-link>

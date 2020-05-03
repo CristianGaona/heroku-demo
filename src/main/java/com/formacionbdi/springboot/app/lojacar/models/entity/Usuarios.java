@@ -18,6 +18,9 @@ public class Usuarios  implements Serializable {
 	
 	private String nombre;
 	private String apellido;
+	private String correo;
+	private int edad;
+
 	
 	public Long getId() {
 		return id;
@@ -38,6 +41,18 @@ public class Usuarios  implements Serializable {
 		this.apellido = apellido;
 	}
 	
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	public int getEdad() {
+		return edad;
+	}
+	public void setEdad(int edad) {
+		this.edad = edad;
+	}
 	/**
 	 * 
 	 */
