@@ -39,6 +39,7 @@ Nota el nombre del paquete raíz no necesariamente puede contener el mismo nombr
 │           └── application.properties
 │           └── import.sql
 ├── Dockerfile
+├── Procfile
 ├── docker-compose.yml
 └── pom.xml
 ```
@@ -769,6 +770,24 @@ INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz'
 INSERT INTO `usuarios` (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
 ```
 Nota: Estos dos últimos pasos mencionadoss se los hace con la finalidad de que al momento de desplegar nuestra aplicación web en Heroku no tengamos errores con la base de datos local. Pero más adelante se hará uso de una base de datos en la nube.
+* En la raíz del proyecto crear El archivo Procfile con la siguiente configuración
+```java
+web: java -Dserver.port=$PORT -jar target/heroku-demo-0.0.1-SNAPSHOT.jar
+```
 * En este punto se recomienda subir nuestra aplicación a GitHub un repositorio remoto se asume que se conoce este procedimiento, si no es el caso se recomienda ver el siguiente tutorial [subir proyecto a Git Hub](https://www.ecodeup.com/como-subir-el-codigo-de-tu-proyecto-a-github/). 
-* Una vez que se subió el proyecto a Git Hub, se procede a conectarlo con Heroku e implementará automáticamente su app siempre que se actualice su repositorio GitHub creado. 
+* Una vez que se subió el proyecto a Git Hub, se procede a conectarlo con Heroku e implementará automáticamente su app siempre que se actualice su repositorio GitHub creado. Como se observa en la imagen
 
+IMAGEN 6
+
+Una vez realizado todo eso se procede abrir la aplicacación en la siguiente url = http://nombre_app_en_heroku.heroku.com o en la parte superior derecha del Dashboard de Heroku donde dice open asi como se observa en la imagen
+
+Imagen 7
+
+Finalmente así se observa la aplicación desplegada en Heroku:
+
+Imagen 8
+
+## Crear base de datos PostgreSQL en la nube
+* Dentro del Dashboard de Heroku en Resources se encuentra Add-ons y buscamos Heroku PostgreSQL como se observa en la imagen
+
+Imagen 9
