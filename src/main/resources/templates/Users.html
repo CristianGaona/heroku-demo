@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Full stack CRUD Example with Spring Boot, PostgreSQL and VueJS</title>
+  <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/users.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <h1>User CRUD</h1>
+    <main id="app">
+      <router-view></router-view>
+    </main>
+  </div>
+
+  <template id="user">
+    <div>
+      <h2>Personal Dates: </h2>
+      <h5>Name: {{ user.nombre }}</h5>
+      
+      <h5>Last Name: {{ user.apellido }}</h5>
+      
+      <br/>
+      <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+      <a>
+        <router-link to="/">Back to user list</router-link>
+      </a>
+    </div>
+  </template>
+
+  <template id="user-list">
+    <div>
+      <div class="actions">
+        <a class="btn btn-default">
+          <router-link :to="{path: '/add-user'}">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add User
+          </router-link>
+        </a>
+      </div>
+      <div class="filters row">
+        <div class="form-group col-sm-3">
+          <input placeholder="Search" v-model="searchKey" class="form-control" id="search-element" requred/>
+        </div>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th class="col-sm-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="usuarios in filteredProducts">
+          <!-- tr v-for="product in products" -->
+          <!-- tr v-for="product in products | filterBy searchKey in 'name'" -->
+          <td>
+            <a>
+              <router-link :to="{name: 'user', params: {user_id: usuarios.id}}">{{ usuarios.nombre }}</router-link>
+            </a>
+          </td>
+          <td>{{ usuarios.apellido }}</td>
+         
+          <td>
+            <a class="btn btn-warning btn-xs">
+              <router-link :to="{name: 'user-edit', params: {user_id: usuarios.id}}">Edit</router-link>
+            </a>
+            <a class="btn btn-danger btn-xs">
+              <router-link :to="{name: 'user-delete', params: {user_id: usuarios.id}}">Delete</router-link>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </template>
+
+<template id="add-user">
+    <div>
+      <h2>Add new user</h2>
+      <form @submit="createUser">
+        <div class="form-group">
+          <label for="add-nombre">Nombre</label>
+          <input class="form-control" id="add-nombre" v-model="user.nombre" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-apellido">Apellido</label>
+          <input class="form-control" id="add-apellido" v-model="user.apellido">
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+  <template id="user-delete">
+    <div>
+      <h2>Delete user {{ user.nombre }}</h2>
+      <form @submit="deleteUser">
+        <p>The action cannot be undone.</p>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+<template id="user-edit">
+    <div>
+      <h2>Edit User</h2>
+      <form @submit="updateUser">
+        <div class="form-group">
+          <label for="edit-nombre">Nombre</label>
+          <input class="form-control" id="edit-nombre" v-model="user.nombre" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-apellido">Apellido</label>
+          <input  class="form-control" id="edit-apellido" v-model="user.apellido" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+  <script src="https://unpkg.com/vue@2.5.22/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+  <script src="/users.js"></script>
+
+</body>
+</html>

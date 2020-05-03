@@ -16,6 +16,7 @@ public class UsuarioServImplement implements IUsuarioService {
 	
     @Autowired
     private UsuarioDao usuarioDao;
+    
 	@Override
 	@Transactional(readOnly = true)
 	public List<Usuarios> findAll() {
@@ -25,13 +26,20 @@ public class UsuarioServImplement implements IUsuarioService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Usuarios finById(Long id) {
+	public Usuarios findById(Long id) {
 		
 		return usuarioDao.findById(id).orElse(null);
 	}
 
-	
+	@Override
+	public Usuarios save(Usuarios usuario) {
+		
+		return usuarioDao.save(usuario);
+	}
 
-	
+	@Override
+	public void deleteById(Long id) {
+		usuarioDao.deleteById(id);
+	}
 
 }

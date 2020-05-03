@@ -5,6 +5,8 @@ import java.util.List;
 import com.formacionbdi.springboot.app.lojacar.models.entity.Usuarios;
 
 public interface IUsuarioService {
-public List<Usuarios> findAll();
-public Usuarios finById(Long id);
+	public List<Usuarios> findAll();
+	public Usuarios findById(Long id);
+	public Usuarios save(Usuarios usuario);
+	public void deleteById( Long id);
 }
