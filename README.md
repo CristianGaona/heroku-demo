@@ -788,11 +788,11 @@ Finalmente así se observa la aplicación desplegada en Heroku:
 Imagen 8
 
 ## Crear base de datos PostgreSQL en la nube
-* Dentro del Dashboard de Heroku -> Resources -> Add-ons y buscamos Heroku PostgreSQL como se observa en la imagen
+* Dentro del Dashboard de Heroku -> Resources -> Add-ons y buscamos Heroku PostgreSQL y selccionamos la version free (gratis) como se observa en la imagen
 
 Imagen 9
 
-* Entramos a Heroku PostgreSQL y nos ubicamos en settings -> view Credentials, y se vizualizará lo siguiente:
+* Entramos a Heroku PostgreSQL y nos ubicamos en settings -> view Credentials, y se vizualizará las credenciales correspondientes de la base de datos creadas por ustedes, algo similar a esto:
 ```java
 Host:  ec2-34-233-186-251.compute-1.amazonaws.com
 Database: d5a7l04gn4h44e
@@ -801,7 +801,7 @@ Port: 5432
 Password: f50e5976a18e6434079897e5b955f0d5970a1bd88757b29345d6a2e65d1968b5
 URI: postgres://hgcltlpdmzsulp:f50e5976a18e6434079897e5b955f0d5970a1bd88757b29345d6a2e65d1968b5@ec2-34-233-186-251.compute-1.amazonaws.com:5432/d5a7l04gn4h44e
 ```
-Una vez que se obtenga todas las credenciales las reeplazamos en nuestra **application.properties**
+Una vez que se obtenga todas las credenciales las reeplazamos en nuestra **application.properties** en la parte correspondiente, por ejemplo
 ```java
 spring.application.name=servicio-usuarios
 server.port=8003
@@ -819,11 +819,36 @@ spring.freemarker.suffix=.html
 
 #spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 ```
-En el **import.sql** volvemos a quitar las comillas inversas a usuarios
+En el **import.sql** volvemos a quitar las comillas inversas a usuarios y se puede eliminar la dependencia de H2 del pom.xml ya que no es necesaria.
 ```sql
 INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gaona', 'crgaonas24@gmail.com', 24);
 INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
 INSERT INTO usuarios (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
 ```
-Finalmente para subimos nuestros cambios al repositorio de Git Hub y Heroku al detectar un cambio realiza el deploy automático de la aplicación, porque así lo configuramos anteriromente, y se puede visualizar nuevamente la aplicación web. En este caso sería [https://heroku-demo-cris.herokuapp.com](https://heroku-demo-cris.herokuapp.com/#/).
 
+Finalmente subimos nuestros cambios al repositorio de Git Hub y Heroku al detectar un cambio realiza el deploy automático de la aplicación, porque así lo configuramos anteriormente, y se puede visualizar nuevamente la aplicación web. En este caso sería [https://heroku-demo-cris.herokuapp.com](https://heroku-demo-cris.herokuapp.com/#/).
+
+Si todo te salió bien hasta este punto, estas listo para seguir con la siguinete parte que corresponde a crear un Pipeline o tambien conocida como canalización DevOps para Integración y despliegue continuo mediante el usos de nuevas herramientas.
+## Implenetación de Deploymente Pipeline en DevOps
+En esta este caso se utilizará el mismo proyecto de heroku-demo en donde el backend se lo desarrollo en Spring Boot y el Frontend en la plantilla de vista de FreeMarker junto con el Framework de Vue Js y el cliente HTTP axios.
+Acontinuación se observa el pipeline a implementar:
+
+IMAGEN 10
+### Herramientas a utilizar
+* **GitHub:** repositorio de código
+* **SonarCloud:** Servicio gratuito SonarQube (no esta configurado en este proyecto)
+* **DockerHub:** publicar imágenes de Docker
+* **Heroku:** para desplegar la aplicación
+* **Travis CI:** es un servicio de integración continua alojado que se utiliza para construir y probar proyectos de software alojados en GitHub.
+### Habilitar Travis CI para el repositorio de Git Hub
+* Vaya a [https://travis-ci.org/](https://travis-ci.org/) e inicie sesión con GitHub .
+
+IMAGEN 11
+
+* Ahora haga clic en Agregar nuevo repositorio (+ símbolo).
+* Al iniciar sesión con GitHub se vizualizará la lista de todos sus repositorios de GitHub habilte el que subió anteriormente en mi caso heroku-demo.
+* junto al repositorio se encuentra un botón que dice setting seleccionamos en la parte superioor hay una lista desplegable que dice more options-> Triggers builds
+https://gph.is/g/ZkRlRAB
+
+
+* 
