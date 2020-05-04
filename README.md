@@ -40,7 +40,7 @@ Nota el nombre del paquete raíz no necesariamente puede contener el mismo nombr
 │           └── import.sql
 ├── Dockerfile
 ├── Procfile
-├── docker-compose.yml
+├──.travis.yml
 └── pom.xml
 ```
 ## Dependencias del proyecto
@@ -372,14 +372,15 @@ logging.level.org.hibernate.SQL=debug
 ```
 Los edpoints serian los siguientes:
 * GET : localhost:8003/api/v1/users
-imagen1
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image1.jpg)
 * GET : localhost:8003/api/v1/users/1 (puede ser 1, 2 o 3 esto es de acurdo al usuarios que quieran buscar)
-imagen2
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image2.jpg) 
 * POST: localhost:8003/api/v1/users
-imagen3
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen3.jpg)
 * PUT: localhost:8003/api/v1/users/1
-DELETE: localhost:8003/api/v1/users/1
-* imagen4
+* DELETE: localhost:8003/api/v1/users/1
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen4.jpg)
+
 Para probar todos estos endpoints se suguiere que lo realicen en Postman
 ## Crear [ViewContgroller.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/controllers/ViewController.java)
 Esta clase nos permite conocetar todo nuestro backend con el Frontend, dentro del método ver() retornamos nuestro archivo User.html
@@ -718,7 +719,7 @@ En est punto ya se puede probar la aplicación con una base de datos en memoria 
 
 Con la siguiente url = http://localhost:8003/
 
-imagen5
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image5.jpg)
 ## Crear base de datos en ProsgreSQL
 Se asume que ya esta instaldo postgreSQL en la máquina local por tal razón se procede a realizar los siguinetes pasos:
 * Crear una base de datos en PostgreSQL mediante pgadmin 4, no se debe crear la tabla usuarios ya que eso se crea atomaticamente al levantar la aplicación de Spring Boot. Por defecto PostgresSQL se ejecuta en el puerto 5432
@@ -777,20 +778,20 @@ web: java -Dserver.port=$PORT -jar target/heroku-demo-0.0.1-SNAPSHOT.jar
 * En este punto se recomienda subir nuestra aplicación a GitHub un repositorio remoto se asume que se conoce este procedimiento, si no es el caso se recomienda ver el siguiente tutorial [subir proyecto a Git Hub](https://www.ecodeup.com/como-subir-el-codigo-de-tu-proyecto-a-github/). 
 * Una vez que se subió el proyecto a Git Hub, se procede a conectarlo con Heroku e implementará automáticamente su app siempre que se actualice su repositorio GitHub creado. Como se observa en la imagen
 
-IMAGEN 6
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image6.jpg)
 
 Una vez realizado todo eso se procede abrir la aplicacación en la siguiente url = http://nombre_app_en_heroku.heroku.com o en la parte superior derecha del Dashboard de Heroku donde dice open asi como se observa en la imagen
 
-Imagen 7
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen7.jpg)
 
 Finalmente así se observa la aplicación desplegada en Heroku:
 
-Imagen 8
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen8.jpg)
 
 ## Crear base de datos PostgreSQL en la nube
 * Dentro del Dashboard de Heroku -> Resources -> Add-ons y buscamos Heroku PostgreSQL y selccionamos la version free (gratis) como se observa en la imagen
 
-Imagen 9
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen9.jpg)
 
 * Entramos a Heroku PostgreSQL y nos ubicamos en settings -> view Credentials, y se vizualizará las credenciales correspondientes de la base de datos creadas por ustedes, algo similar a esto:
 ```java
@@ -833,7 +834,13 @@ Si todo te salió bien hasta este punto, estas listo para seguir con la siguinet
 En esta este caso se utilizará el mismo proyecto de heroku-demo en donde el backend se lo desarrollo en Spring Boot y el Frontend en la plantilla de vista de FreeMarker junto con el Framework de Vue Js y el cliente HTTP axios.
 Acontinuación se observa el pipeline a implementar:
 
-IMAGEN 10
+<p align="center">
+  <img src="https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen10.png">
+</p>
+
+* En la imagen se puede observar como es el funcionamiento del pipeline, todo empieza cuando el desarrollador realiza un push a us repositorio remoto (Git Hub).
+* Travis CI detecta ese push y comienza con la instalación de todo lo necesario para la compilación, pruebas, publica la imagen de docker en Docker Hub según las especificaciones del DockerFile, finalmnete realiza el despliegue en Heroku y podemos disfrutar de nuestra aplicación.
+
 ### Herramientas a utilizar
 * **GitHub:** repositorio de código
 * **SonarCloud:** Servicio gratuito SonarQube (no esta configurado en este proyecto)
@@ -843,12 +850,91 @@ IMAGEN 10
 ### Habilitar Travis CI para el repositorio de Git Hub
 * Vaya a [https://travis-ci.org/](https://travis-ci.org/) e inicie sesión con GitHub .
 
-IMAGEN 11
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen11.png)
 
 * Ahora haga clic en Agregar nuevo repositorio (+ símbolo).
 * Al iniciar sesión con GitHub se vizualizará la lista de todos sus repositorios de GitHub habilte el que subió anteriormente en mi caso heroku-demo.
-* junto al repositorio se encuentra un botón que dice setting seleccionamos en la parte superioor hay una lista desplegable que dice more options-> Triggers builds
+* junto al repositorio se encuentra un botón que dice settings seleccionamos y en parte izquierda se ve el nombre del repositrio creado en Travis
+
 https://gph.is/g/ZkRlRAB
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/AddRepoTravis.gif)
+### Crear repositorio en Docker Hub
+* Vaya a [https://hub.docker.com/](https://hub.docker.com/) para crear una cuenta e ingresar (no olvide el usuario o Docker ID y la contrseña por que se las utilizará más adelante.
+* Crear un repositorio para almacenar la imagen de Docker
 
+IMAGE 13
 
-* 
+* Asignar el nombre del repositorio evite poner letras mayúsculas y carácteres especiales
+
+IMAGE 14
+
+### Configurar variables de entorno en Travis CI
+
+* Ingresamos al repositorio creado en Travis en mi caso heroku-demo
+* Clic en more options se deplegará una lista en donde selccionamos setting
+* En la parte de Environment Variables colocamos el nombre, valor y rama maestra del proyecto (master):
+
+ Las variables a configurar son :
+ 
+* DOCKER_USER = como valor debe ir el usuario con el que ingresaron a Docker Hub
+* DOCKER_PASS = como valor debe ir la contraseña con la que ingresaron a Docker Hub
+* HEROKU_API_KEY = API Key de acceso a HEROKU
+
+Por ejemplo:
+
+IMAGEN14-1
+
+Al momento que oprime Add se agregan los valores de las variables encriptadas. En caso de equivocarse puede eliminar la variable y agregar una nueva.
+
+Para obtener el el API KEY de HEROKU siga los siguientes pasos:
+
+* Dirijase a configuración de la cuenta (Account settings) o si esta logueado ingrese a esta url [https://dashboard.heroku.com/account](https://dashboard.heroku.com/account)
+* En la parte final observará el apartado de API Key oprima en Reveal para visualizar el API Key y coloquela en la variable de entorno de Travis HEROKU_API_KEY 
+
+IMAGE15
+
+Finalmente las variables deben quedar configuradas de la siguiente manera:
+
+IMAGEN16
+
+### Crear y configurar archivo Dockerfile
+* Crear el archivo Dockerfile en la raíz del proyecto
+* Configurar el archivo Dockerfile de la siguiente manera:
+
+IMAGE18
+
+en la linea 3 asegurese que despues del target vaya el nombre de su aplicación
+
+### Crear y configurar archivo .travis.yml
+* Crear el archivo .travis.yml en la raíz del proyecto, si al crear este archivo no puede visualizarlo con Spring Tools, dirijase a la dirección del proyecto en su máquina local y abraló con un editor de código de su preferencia.
+
+IMAGE17
+
+* En la línea 2 se especifica el lenguaje de programación en el que se desarrolló la aplicación en este caso java para el backend y Travis al detectar el archivo pom.xml lo tratará como un proyecto Maven.
+* En la línea 3 se especifica el jdk a utilizar puede ser oraclejdk8 y openjdk8
+* En la línea 5 se declaran los servicios de Docker y con eso poder ejecutar comandos Docker en nuestra aplicación
+* En la línea 8 a 11 se declaran las variables de entorno necesarias para travis en este caso a las variables las he declarado dentro del repositorio creado en TRAVIS CI, así que estas líneas son opcionales, porque toda la configuración está en el repositorio creado en Travis.
+* En la línea 18, Travis ejecuta mvn test -B, que solo ejecutará pruebas unitarias. Por defecto, Travis ejecutará mvn test -B para construir el proyecto. Si Travis encuentra mvnw wrapper, se usará como ./mvnw test -B .
+* En la 25 línea debe agregar el nombre de las variables de entorno que configuro en TRAVIS CI en este caso DOCKER_USER Y DOCKER_PASS.
+* En las líneas 26 a 30 son comandos de docker para crear imágenes y publicar en dockerhub
+* En la línea 33 colocamos el nombre del proveedor en este caso heroku esto tiene relación con el archivo PROFILE.
+* En la línea 34 se coloca la variable de entorno HEROKU_API_KEY que es generada en la aplicación creada en HEROKU.
+* En la línea 35 se coloca el nombre de la aplicación creada en HEROKU.
+
+Por último para verificar que el pipeline esta correcto quitamos el dploy automático que configuramos en Heroku y que todo esto lo haga Travis CI 
+
+IMAGE19
+
+Finalmente puede realizar un realizar un push desde su repositorio local del Git a su repositorio remoto de GitHub y automáticamente TRAVIS CI deberá detectar ese cambio y comenzar a compilar todo el proyecto según las configuraciones previas.
+Una vez que la compilación sea exitosa se enviará un los resultados al correo con el que está registrado en GitHub y se implementará en Heroku, debería poder acceder a la aplicación en https://<nombre_app_heroku>.herokuapp.com/ o con la dirección que accedio anteriormente.
+
+Aqui se puede observar cuando Travis CI detecta un Push en el repositorio de Git Hub y comienza a realizar todo lo que se configuró en el .travis.yml todo esto es de color amarillo
+
+IMAGE20
+
+Aquí se puede observar cuando Travis CI finaliza toda la compilación del proyecto todo esto es de color verde
+y al final de la comilación nos muestra un mensaje de éxito.
+
+IMAGE 21
+
+IMAGE 22
