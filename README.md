@@ -788,6 +788,42 @@ Finalmente así se observa la aplicación desplegada en Heroku:
 Imagen 8
 
 ## Crear base de datos PostgreSQL en la nube
-* Dentro del Dashboard de Heroku en Resources se encuentra Add-ons y buscamos Heroku PostgreSQL como se observa en la imagen
+* Dentro del Dashboard de Heroku -> Resources -> Add-ons y buscamos Heroku PostgreSQL como se observa en la imagen
 
 Imagen 9
+
+* Entramos a Heroku PostgreSQL y nos ubicamos en settings -> view Credentials, y se vizualizará lo siguiente:
+```java
+Host:  ec2-34-233-186-251.compute-1.amazonaws.com
+Database: d5a7l04gn4h44e
+User: hgcltlpdmzsulp
+Port: 5432
+Password: f50e5976a18e6434079897e5b955f0d5970a1bd88757b29345d6a2e65d1968b5
+URI: postgres://hgcltlpdmzsulp:f50e5976a18e6434079897e5b955f0d5970a1bd88757b29345d6a2e65d1968b5@ec2-34-233-186-251.compute-1.amazonaws.com:5432/d5a7l04gn4h44e
+```
+Una vez que se obtenga todas las credenciales las reeplazamos en nuestra **application.properties**
+```java
+spring.application.name=servicio-usuarios
+server.port=8003
+
+
+spring.datasource.url=jdbc:postgresql://ec2-34-233-186-251.compute-1.amazonaws.com:5432/d5a7l04gn4h44e?serverTimezone=America/Guayaquil
+spring.datasource.username=hgcltlpdmzsulp
+spring.datasource.password=f50e5976a18e6434079897e5b955f0d5970a1bd88757b29345d6a2e65d1968b5
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL95Dialect
+spring.jpa.hibernate.ddl-auto=create
+
+logging.level.org.hibernate.SQL=debug
+spring.freemarker.suffix=.html
+
+#spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+```
+En el **import.sql** volvemos a quitar las comillas inversas a usuarios
+```sql
+INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gaona', 'crgaonas24@gmail.com', 24);
+INSERT INTO usuarios (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
+INSERT INTO usuarios (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
+```
+Finalmente para subimos nuestros cambios al repositorio de Git Hub y Heroku al detectar un cambio realiza el deploy automático de la aplicación, porque así lo configuramos anteriromente, y se puede visualizar nuevamente la aplicación web. En este caso sería [https://heroku-demo-cris.herokuapp.com](https://heroku-demo-cris.herokuapp.com/#/).
+
