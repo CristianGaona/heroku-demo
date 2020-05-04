@@ -862,11 +862,11 @@ https://gph.is/g/ZkRlRAB
 * Vaya a [https://hub.docker.com/](https://hub.docker.com/) para crear una cuenta e ingresar (no olvide el usuario o Docker ID y la contrseña por que se las utilizará más adelante.
 * Crear un repositorio para almacenar la imagen de Docker
 
-IMAGE 13
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image13.jpg)
 
 * Asignar el nombre del repositorio evite poner letras mayúsculas y carácteres especiales
 
-IMAGE 14
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image14.jpg)
 
 ### Configurar variables de entorno en Travis CI
 
@@ -882,7 +882,7 @@ IMAGE 14
 
 Por ejemplo:
 
-IMAGEN14-1
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image14-1.jpg)
 
 Al momento que oprime Add se agregan los valores de las variables encriptadas. En caso de equivocarse puede eliminar la variable y agregar una nueva.
 
@@ -891,24 +891,24 @@ Para obtener el el API KEY de HEROKU siga los siguientes pasos:
 * Dirijase a configuración de la cuenta (Account settings) o si esta logueado ingrese a esta url [https://dashboard.heroku.com/account](https://dashboard.heroku.com/account)
 * En la parte final observará el apartado de API Key oprima en Reveal para visualizar el API Key y coloquela en la variable de entorno de Travis HEROKU_API_KEY 
 
-IMAGE15
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image15.jpg)
 
 Finalmente las variables deben quedar configuradas de la siguiente manera:
 
-IMAGEN16
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image16.jpg)
 
 ### Crear y configurar archivo Dockerfile
 * Crear el archivo Dockerfile en la raíz del proyecto
 * Configurar el archivo Dockerfile de la siguiente manera:
 
-IMAGE18
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image18.jpg)
 
 en la linea 3 asegurese que despues del target vaya el nombre de su aplicación
 
 ### Crear y configurar archivo .travis.yml
 * Crear el archivo .travis.yml en la raíz del proyecto, si al crear este archivo no puede visualizarlo con Spring Tools, dirijase a la dirección del proyecto en su máquina local y abraló con un editor de código de su preferencia.
 
-IMAGE17
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image17.jpg)
 
 * En la línea 2 se especifica el lenguaje de programación en el que se desarrolló la aplicación en este caso java para el backend y Travis al detectar el archivo pom.xml lo tratará como un proyecto Maven.
 * En la línea 3 se especifica el jdk a utilizar puede ser oraclejdk8 y openjdk8
@@ -923,18 +923,28 @@ IMAGE17
 
 Por último para verificar que el pipeline esta correcto quitamos el dploy automático que configuramos en Heroku y que todo esto lo haga Travis CI 
 
-IMAGE19
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image19.jpg)
 
 Finalmente puede realizar un realizar un push desde su repositorio local del Git a su repositorio remoto de GitHub y automáticamente TRAVIS CI deberá detectar ese cambio y comenzar a compilar todo el proyecto según las configuraciones previas.
 Una vez que la compilación sea exitosa se enviará un los resultados al correo con el que está registrado en GitHub y se implementará en Heroku, debería poder acceder a la aplicación en https://<nombre_app_heroku>.herokuapp.com/ o con la dirección que accedio anteriormente.
 
 Aqui se puede observar cuando Travis CI detecta un Push en el repositorio de Git Hub y comienza a realizar todo lo que se configuró en el .travis.yml todo esto es de color amarillo
 
-IMAGE20
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image20.jpg)
 
 Aquí se puede observar cuando Travis CI finaliza toda la compilación del proyecto todo esto es de color verde
 y al final de la comilación nos muestra un mensaje de éxito.
 
-IMAGE 21
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image21.jpg)
 
-IMAGE 22
+
+![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image22.jpg)
+
+### Referencias
+* [Ejemplo de Spring Boot CRUD](https://hellokoding.com/full-stack-crud-web-app-and-restful-apis-web-services-example-with-spring-boot-jpa-hibernate-mysql-vuejs-and-docker/)
+* [CI/CD for SpringBoot applications using Travis-CI] (https://sivalabs.in/2018/01/ci-cd-springboot-applications-using-travis-ci/)
+* [Learn about building, deploying, and managing your apps on Heroku.](https://devcenter.heroku.com/)
+* [Heroku Postgres](https://devcenter.heroku.com/articles/heroku-postgresql)
+* [Continuous Deployment con Docker + Travis + Heroku](https://medium.com/@javierfernandes/continuous-deployment-con-docker-travis-heroku-c24042fb830b)
+* [Deploying / Hosting Spring Boot applications on Heroku](https://www.callicoder.com/deploy-host-spring-boot-apps-on-heroku/)
+
