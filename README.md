@@ -1,14 +1,14 @@
-# Ejemplo CRUD de Usuarios con Spring Boot, API RESTful, JPA, HIbernate, Postgresql, FreeMarker y VueJS
+# Ejemplo CRUD de Usuarios con Spring Boot, API RESTful, JPA, HIbernate, Postgresql, FreeMarker, VueJS y canalización DevOps
 Tutorial para la construcción de una palicación web utilizando las tecnologías antes mencionadas, además se creara un pipeline para la integración y despliegue continuo.
-## Herramientas necesarias
+### Herramientas necesarias
 Su computadora debe tener instalado 
 * JDK 8 u OpenJDK 8 en adelante, 
 * PostgreSQL 9.5 en adelante en este caso se ha usuado la version 12.2 https://www.postgresql.org/download/
 * Spring Tools 4 for Eclipse https://spring.io/tools
 
-## Crear un proyecto utilizando Spring Tools for Eclipse
+### Crear un proyecto utilizando Spring Tools for Eclipse
 Nombre del proyecto heroku-demo o cualquier otro nombre, en donde la estructura del proyecto debe ser la siguiente:
-Nota el nombre del paquete raíz no necesariamente puede contener el mismo nombre esto queda a conveniencia del desarrollador
+**Nota:** el nombre del paquete raíz no necesariamente puede contener el mismo nombre esto queda a conveniencia del desarrollador
 ```json
  src
 │   └── main
@@ -43,7 +43,7 @@ Nota el nombre del paquete raíz no necesariamente puede contener el mismo nombr
 ├──.travis.yml
 └── pom.xml
 ```
-## Dependencias del proyecto
+### Dependencias del proyecto
 Estas dependecias se encuentran en el [pom.xml](pom.xml)  del proyecto
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -124,7 +124,7 @@ Estas dependecias se encuentran en el [pom.xml](pom.xml)  del proyecto
 </project>
 
 ```
-## Creación de la Entidad
+### Creación de la Entidad
 [Usuarios.java](src/main/java/com/formacionbdi/springboot/app/lojacar/models/entity/Usuarios.java) esta clase permite crear la respectiva tabla de usuarios con sus atributos en la base de datos seleccionada.
 * @Entity es una anotación de JPA que nos permite manipular la base de datos a través de objetos, con esta anotación estamos mapeando la clase con una tabla de la base de datos
 * @Table es una anotación de JPA  que nos permite renombrar el nombre de la tabla, es recomendable respetar mayúsculas y minúsculas.
@@ -192,8 +192,8 @@ public class Usuarios  implements Serializable {
 }
 
 ```
-## Crear la interface [UsuarioDao](src/main/java/com/formacionbdi/springboot/app/lojacar/models/dao/UsuarioDao.java)
-Esta interfaz extendiende de [CrudRepository](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) una interfaz de opreaciones CRUD generéricas en un repositorio para un tipo especifico, con esto se logra abstracción de código  para realizar un CRUD (create, read, update and delete)
+### Crear la interface [UsuarioDao](src/main/java/com/formacionbdi/springboot/app/lojacar/models/dao/UsuarioDao.java)
+Esta interface extende de [CrudRepository](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) una interface de opreaciones CRUD generéricas en un repositorio para un tipo especifico, con esto se logra abstracción de código  para realizar un CRUD (create, read, update and delete)
 ```java
 package com.formacionbdi.springboot.app.lojacar.models.dao;
 
@@ -206,8 +206,8 @@ public interface UsuarioDao extends CrudRepository<Usuarios, Long> {
 }
 
 ```
-## Creación de la interface [IUsuarioService](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/models/service/IUsuarioService.java)
-A lo mejor en este momento esta interfarce no cumpla con la función adecuada por lo que es un ejemplo sencillo, pero cuando trabajamos con microservicios es muy útil porque permite el desacoplamiento de una clase, esto quiere decir que la interface es una funcionalidad abierta a la reutilización y extensibilidad. En este caso declaramos los métodos básicos de un CRUD para que sean implemnetados en la Clase UsuarioServImplement.java
+### Creación de la interface [IUsuarioService](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/models/service/IUsuarioService.java)
+A lo mejor en este momento esta interface no cumpla con la función adecuada por lo que es un ejemplo sencillo, pero cuando trabajamos con microservicios es muy útil porque permite el desacoplamiento de una clase, esto quiere decir que la interface es una funcionalidad abierta a la reutilización y extensibilidad. En este caso declaramos los métodos básicos de un CRUD para que sean implementados en la Clase UsuarioServImplement.java
 ```java
 package com.formacionbdi.springboot.app.lojacar.models.service;
 
@@ -222,7 +222,7 @@ public interface IUsuarioService {
 	public void deleteById( Long id);
 }
 ```
-## Creación de la clase [UsuarioServImplement.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/models/service/UsuarioServImplement.java)
+### Creación de la clase [UsuarioServImplement.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/models/service/UsuarioServImplement.java)
 En esta clase se puede observar las siguientes anotaciones:
 * @Service contiene la lógica empresarial y los métodos de llamada  en la capa de repositorio.
 * @Autowired permite la inyección de dependencias, en este caso se lo a utilizado para trabajar con una sola intancia y no crear una instancia nueva del objeto cada vez que se necesite la funcionalidad de determinadas clases.
@@ -276,8 +276,8 @@ public class UsuarioServImplement implements IUsuarioService {
 }
 
 ```
-## Crear la clase [UsuarioController.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/controllers/UsuarioController.java)
-Esta clase nos permite manejar todos nuestros endpoints, ademas proporciona una implementación para agregar nuevos usuarios, buscar un lista de todos los usuarios, buscar un usuario especifíco y actualizar y eliminar un usuario.
+### Crear la clase [UsuarioController.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/controllers/UsuarioController.java)
+Esta clase nos permite manejar todos nuestros endpoints, ademas proporciona una implementación para agregar nuevos usuarios, buscar un lista de todos los usuarios, buscar un usuario especifíco, actualizar y eliminar un usuario.
 ```java
 package com.formacionbdi.springboot.app.lojacar.controllers;
 
@@ -344,7 +344,6 @@ public class UsuarioController {
 }
 
 ```
-ESTO ES OPCIONAL
 
 Ahora ya se puede levantar la aplicación, pero antes para probar 
 deben agregar la dependecia H2 en el pon.xml, una base de datos en memoria que se crea cuando se levanta el proyecto y se destruye cuando se da de baja la aplicación por lo cual no existe persistencia de datos
@@ -364,7 +363,7 @@ INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Cristian', 'Gao
 INSERT INTO `usuarios` (nombre, apellido, correo, edad ) VALUES('Daniel', 'Cruz', 'dcruz34@hotmail.com', 25);
 INSERT INTO `usuarios` (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval','jsando26@yahoo.es', 21 );
 ```
-Deben configurar el archivo **application.properties** de la siguiente manera, en donde se indica el nombre de la aplicación, puerto en el que va a correer y la ultima linea sirve para ver como se generar los inserts por consola
+Deben configurar el archivo **application.properties** de la siguiente manera, en donde se indica el nombre de la aplicación, puerto en el que va a correr y la última linea sirve para ver como se generar los insert por consola
 ```java
 spring.application.name=servicio-usuarios
 server.port=8003
@@ -382,7 +381,7 @@ Los edpoints serian los siguientes:
 ![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen4.jpg)
 
 Para probar todos estos endpoints se suguiere que lo realicen en Postman
-## Crear [ViewContgroller.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/controllers/ViewController.java)
+### Crear [ViewController.java](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/java/com/formacionbdi/springboot/app/lojacar/controllers/ViewController.java)
 Esta clase nos permite conocetar todo nuestro backend con el Frontend, dentro del método ver() retornamos nuestro archivo User.html
 ```java
 package com.formacionbdi.springboot.app.lojacar.controllers;
@@ -399,7 +398,7 @@ public class ViewController {
 	}
 }
  ```
-## Crear una plantilla de vista de FreeMarker
+### Crear una plantilla de vista de FreeMarker
 Para esto debemos agregar la siguiente dependencia esto se lo puede hacer de la siguinete manera en el caso que utilicen Spring Tools (STS) 
 * Clic derecho en el proyecto
 * Seleccionamos casi en la prte final Spring -> Edit Startes
@@ -415,7 +414,7 @@ En el caso que no utilicen STS se debe agregar la siguiente dependencia en el po
 </dependency>
 ```
 
-Ahora si procesdemos a crear Users.html y agregar la librería de Vue Js junto con [Axios](https://vuejs.org/v2/cookbook/using-axios-to-consume-apis.html) que nos permite consumir y mostrar datos una API, en esta caso coumiremos la API que creamos con Spring Boot, axios es un cliente HTTP basado en promesas
+Ahora si procedemos a crear Users.html y agregar la librería de Vue Js junto con [Axios](https://vuejs.org/v2/cookbook/using-axios-to-consume-apis.html) que nos permite consumir y mostrar datos una API, en esta caso consumiremos la API que creamos con Spring Boot, axios es un cliente HTTP basado en promesas.
 
 ```html
 <!DOCTYPE html>
@@ -576,8 +575,8 @@ Ahora si procesdemos a crear Users.html y agregar la librería de Vue Js junto c
 </body>
 </html>
 ```
-## Crear [users.js](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/resources/static/users.js)
-aqui tenemos todas las funciones necesarias para realizar el CRUD desde la vista web y las correspondientes rutas.
+### Crear [users.js](https://github.com/CristianGaona/heroku-demo/blob/master/src/main/resources/static/users.js)
+Aquí tenemos todas las funciones necesarias para realizar el CRUD desde la vista web y las correspondientes rutas.
 ```js
 var usuarios = [];
 
@@ -714,16 +713,16 @@ new Vue({
   margin-top: 20px;
 }
 ```
-## Probar la aplicación web
+### Probar la aplicación web
 En est punto ya se puede probar la aplicación con una base de datos en memoria H2
 
 Con la siguiente url = http://localhost:8003/
 
 ![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image5.jpg)
-## Crear base de datos en ProsgreSQL
+### Crear base de datos en ProsgreSQL
 Se asume que ya esta instaldo postgreSQL en la máquina local por tal razón se procede a realizar los siguinetes pasos:
-* Crear una base de datos en PostgreSQL mediante pgadmin 4, no se debe crear la tabla usuarios ya que eso se crea atomaticamente al levantar la aplicación de Spring Boot. Por defecto PostgresSQL se ejecuta en el puerto 5432
-* Agregar la dependecia, se puede revisar el [pom.xml](pom.xml) cargado en este repositorio
+* Crear una base de datos en PostgreSQL mediante pgadmin 4, no se debe crear la tabla usuarios ya que eso se crea automáticamente al levantar la aplicación de Spring Boot. Por defecto PostgresSQL se ejecuta en el puerto 5432
+* Agregar la dependecia, se puede revisar el [pom.xml](pom.xml) cargado en este repositorio.
 ```xml
 <dependency>
     <groupId>org.postgresql</groupId>
@@ -731,8 +730,8 @@ Se asume que ya esta instaldo postgreSQL en la máquina local por tal razón se 
     <scope>runtime</scope>
 </dependency>
 ```
-* configurar el archivo **application.properties** de la siguiente manera.
-Como se puede observar en la configuración (spring.datasource.url) se coloca el puerto por defecto y el nombre de la base de datos, además usuario, contraseña, driver y el dialect en est caso lehe colocado PostgreSQL95Dialect porque funciona desde la version 9.5 en adelante.
+* Configurar el archivo **application.properties** de la siguiente manera.
+Como se puede observar en la configuración (spring.datasource.url) se coloca el puerto por defecto y el nombre de la base de datos, además usuario, contraseña, driver y el dialect en este caso he colocado PostgreSQL95Dialect porque funciona desde la version 9.5 en adelante.
 ```java
 spring.application.name=servicio-usuarios
 server.port=8003
@@ -780,7 +779,7 @@ web: java -Dserver.port=$PORT -jar target/heroku-demo-0.0.1-SNAPSHOT.jar
 
 ![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image6.jpg)
 
-Una vez realizado todo eso se procede abrir la aplicacación en la siguiente url = http://nombre_app_en_heroku.heroku.com o en la parte superior derecha del Dashboard de Heroku donde dice open asi como se observa en la imagen
+Una vez realizado todo eso se procede abrir la aplicación en la siguiente url = http://nombre_app_en_heroku.heroku.com o en la parte superior derecha del Dashboard de Heroku donde dice open asi como se observa en la imagen
 
 ![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/imagen7.jpg)
 
@@ -829,8 +828,8 @@ INSERT INTO usuarios (nombre, apellido, correo, edad) VALUES('Juan', 'Sandoval',
 
 Finalmente subimos nuestros cambios al repositorio de Git Hub y Heroku al detectar un cambio realiza el deploy automático de la aplicación, porque así lo configuramos anteriormente, y se puede visualizar nuevamente la aplicación web. En este caso sería [https://heroku-demo-cris.herokuapp.com](https://heroku-demo-cris.herokuapp.com/#/).
 
-Si todo te salió bien hasta este punto, estas listo para seguir con la siguinete parte que corresponde a crear un Pipeline o tambien conocida como canalización DevOps para Integración y despliegue continuo mediante el usos de nuevas herramientas.
-## Implenetación de Deploymente Pipeline en DevOps
+Si todo te salió bien hasta este punto, estas listo para seguir con la siguinete parte que corresponde a crear un Pipeline o tambien conocida como canalización DevOps para Integración y Despliegue continuo mediante el usos de nuevas herramientas.
+### Implenetación de Deployment Pipeline en DevOps
 En esta este caso se utilizará el mismo proyecto de heroku-demo en donde el backend se lo desarrollo en Spring Boot y el Frontend en la plantilla de vista de FreeMarker junto con el Framework de Vue Js y el cliente HTTP axios.
 Acontinuación se observa el pipeline a implementar:
 
@@ -926,7 +925,7 @@ Por último para verificar que el pipeline esta correcto quitamos el dploy autom
 ![img](https://github.com/CristianGaona/heroku-demo/blob/master/ImagesReadme/image19.jpg)
 
 Finalmente puede realizar un realizar un push desde su repositorio local del Git a su repositorio remoto de GitHub y automáticamente TRAVIS CI deberá detectar ese cambio y comenzar a compilar todo el proyecto según las configuraciones previas.
-Una vez que la compilación sea exitosa se enviará un los resultados al correo con el que está registrado en GitHub y se implementará en Heroku, debería poder acceder a la aplicación en https://<nombre_app_heroku>.herokuapp.com/ o con la dirección que accedio anteriormente.
+Una vez que la compilación sea exitosa se enviará un los resultados al correo con el que está registrado en GitHub y se implementará en Heroku, debería poder acceder a la aplicación en https://<nombre_app_heroku>.herokuapp.com/ o con la dirección que accedió anteriormente.
 
 Aqui se puede observar cuando Travis CI detecta un Push en el repositorio de Git Hub y comienza a realizar todo lo que se configuró en el .travis.yml todo esto es de color amarillo
 
