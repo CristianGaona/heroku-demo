@@ -1,5 +1,5 @@
 # Ejemplo CRUD de Usuarios con Spring Boot, API RESTful, JPA, HIbernate, Postgresql, FreeMarker, VueJS y canalización DevOps
-Tutorial para la construcción de una palicación web utilizando las tecnologías antes mencionadas, además se creara un pipeline para la integración y despliegue continuo.
+Tutorial para la construcción de una apalicación web utilizando las tecnologías antes mencionadas, además se creara un pipeline para la integración y despliegue continuo.
 ### Herramientas necesarias
 Su computadora debe tener instalado 
 * JDK 8 u OpenJDK 8 en adelante, 
